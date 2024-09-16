@@ -50,6 +50,11 @@ public class QuickfixInlayHintsProvider implements InlayHintsProvider<NoSettings
 
     private static class MyCollector implements InlayHintsCollector {
 
+        // Set the top and bottom insets using magic numbers for better alignment
+        // TODO - Use a better way to calculate insets
+        final int TOP_INSET = 6;
+        final int BOTTOM_INSET = 2;
+
         @Override
         public boolean collect(@NotNull PsiElement element, @NotNull Editor editor, @NotNull InlayHintsSink sink){
 
@@ -79,35 +84,64 @@ public class QuickfixInlayHintsProvider implements InlayHintsProvider<NoSettings
             String fieldName = attributeValue.getValue();
 
             // Find the tag number
-            String tagNumber = findTagNumber(getRootTag(tag), fieldName);
+            final XmlTag fieldTag = findField(getRootTag(tag), fieldName);
 
-            if (tagNumber != null) {
-                // Set the top and bottom insets using magic numbers for better alignment
-                // TODO - Use a better way to calculate insets
-                 int topInset = 6;
-                 int bottomInset = 2;
+            String tagNumber = fieldTag != null ? fieldTag.getAttributeValue("number") : null;
+            String fieldType = fieldTag != null ? fieldTag.getAttributeValue("type") : null;
 
-                // Create the inlay presentation
-                PresentationFactory factory = new PresentationFactory(editor);
-                InlayPresentation textPresentation = factory.text(" (" + tagNumber + ")");
-
-                // Wrap with InsetPresentation
-                InlayPresentation centeredPresentation = new InsetPresentation(
-                        textPresentation,
-                        0,         // Left inset
-                        0,         // Right inset
-                        topInset,  // Top inset
-                        bottomInset // Bottom inset
-                );
-
-                int offset = attributeValue.getTextRange().getEndOffset();
-                sink.addInlineElement(offset, false, centeredPresentation, false);
-            }
+            maybeAddTagNumber(editor, sink, attributeValue, tagNumber);
+            maybeAddFieldType(editor, sink, attributeValue, fieldType);
 
             return true;
         }
 
-        private @Nullable String findTagNumber(PsiElement root, String fieldName) {
+        private void maybeAddTagNumber(Editor editor, InlayHintsSink sink, XmlAttributeValue attributeValue, String tagNumber) {
+            if (tagNumber == null) {
+                return;
+            }
+
+            // Create the inlay presentation
+            PresentationFactory factory = new PresentationFactory(editor);
+            InlayPresentation textPresentation = factory.text(" (" + tagNumber + ")");
+
+            // Wrap with InsetPresentation
+            InlayPresentation centeredPresentation = new InsetPresentation(
+                    textPresentation,
+                    0,              // Left inset
+                    0,             // Right inset
+                    TOP_INSET,     // Top inset
+                    BOTTOM_INSET   // Bottom inset
+            );
+
+            int offset = attributeValue.getTextRange().getEndOffset();
+            sink.addInlineElement(offset, false, centeredPresentation, false);
+        }
+
+        private void maybeAddFieldType(Editor editor, InlayHintsSink sink, XmlAttributeValue attributeValue, String fieldType) {
+            if (fieldType == null) {
+                return;
+            }
+
+            // Create the inlay presentation
+            PresentationFactory factory = new PresentationFactory(editor);
+            InlayPresentation textPresentation = factory.text(" (" + fieldType + ")");
+
+            // Wrap with InsetPresentation
+            InlayPresentation centeredPresentation = new InsetPresentation(
+                    textPresentation,
+                    0,              // Left inset
+                    0,             // Right inset
+                    TOP_INSET,     // Top inset
+                    BOTTOM_INSET   // Bottom inset
+            );
+
+            int offset = attributeValue.getTextRange().getEndOffset();
+            sink.addInlineElement(offset, false, centeredPresentation, false);
+        }
+
+
+
+        private @Nullable XmlTag findField(PsiElement root, String fieldName) {
             if (!(root instanceof XmlTag rootTag)) {
                 return null;
             }
@@ -119,12 +153,13 @@ public class QuickfixInlayHintsProvider implements InlayHintsProvider<NoSettings
                 for (XmlTag fieldTag : fieldsTag.findSubTags("field")) {
                     String nameAttr = fieldTag.getAttributeValue("name");
                     if (fieldName.equals(nameAttr)) {
-                        return fieldTag.getAttributeValue("number");
+                        return fieldTag;
                     }
                 }
             }
             return null;
         }
+
 
         // Helper method to navigate to the root tag
         private @Nullable XmlTag getRootTag(PsiElement element) {
