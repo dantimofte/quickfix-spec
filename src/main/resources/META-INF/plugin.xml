@@ -1,25 +1,21 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.dantimofte.quickfixspec</id>
-    <name>Quickfix-Spec</name>
-    <vendor>dantimofte</vendor>
-
+    <id>ac.quant.quickfixspec</id>
+    <name>Quickfix XML Spec</name>
+    <vendor>Dan Timofte</vendor>
+    <description>
+        Adds inlay with the tag number to fields and groups in quickfix XML files.
+    </description>
     <depends>com.intellij.modules.platform</depends>
 
     <resource-bundle>messages.MyBundle</resource-bundle>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.dantimofte.quickfixspec.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-    </extensions>
 
     <!-- Register the Inlay Hints Provider -->
     <extensions defaultExtensionNs="com.intellij.codeInsight">
         <inlayProvider
                 implementationClass="ac.quant.quickfixspec.inlay.QuickfixInlayHintsProvider"
-                language="XML"/>
+                language="XML"
+        />
     </extensions>
 
-    <applicationListeners>
-        <listener class="com.github.dantimofte.quickfixspec.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
-    </applicationListeners>
 </idea-plugin>
