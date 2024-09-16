@@ -52,7 +52,11 @@ jobs:
           # deleting 15GB
           rm -rf /usr/share/dotnet/
           df -h
-
+          sudo swapoff -a
+          sudo rm -f /swapfile
+          sudo apt clean
+          docker rmi $(docker image ls -aq)
+          df -h
 
       # Check out the current repository
       - name: Fetch Sources
