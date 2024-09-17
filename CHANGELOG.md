@@ -3,5 +3,7 @@
 # quickfix-spec Changelog
 
 ## [Unreleased]
+
 ### Added
-- Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+- v0.0.1 Add tag number next to the field name
+- v0.1.0 Add types next to the field name

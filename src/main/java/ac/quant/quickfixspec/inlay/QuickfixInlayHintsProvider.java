@@ -5,17 +5,13 @@ import com.intellij.codeInsight.hints.presentation.*;
 import com.intellij.lang.Language;
 import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.colors.EditorFontType;
 import com.intellij.psi.*;
 import com.intellij.psi.xml.*;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.intellij.codeInsight.hints.presentation.InlayPresentation;
-import com.intellij.codeInsight.hints.presentation.PresentationFactory;
 
 import javax.swing.*;
-import java.awt.*;
 
 @SuppressWarnings("UnstableApiUsage")
 @Slf4j
