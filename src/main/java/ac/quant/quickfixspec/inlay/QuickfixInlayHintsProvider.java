@@ -2,16 +2,26 @@ package ac.quant.quickfixspec.inlay;
 
 import com.intellij.codeInsight.hints.*;
 import com.intellij.codeInsight.hints.presentation.*;
+import com.intellij.ide.DataManager;
 import com.intellij.lang.Language;
 import com.intellij.lang.xml.XMLLanguage;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionPlaces;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.Inlay;
 import com.intellij.psi.*;
 import com.intellij.psi.xml.*;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import static ac.quant.quickfixspec.common.PsiUtils.getRootTag;
 
 @SuppressWarnings("UnstableApiUsage")
 @Slf4j
@@ -40,7 +50,6 @@ public class QuickfixInlayHintsProvider implements InlayHintsProvider<NoSettings
             @NotNull Editor editor,
             @NotNull NoSettings settings,
             @NotNull InlayHintsSink sink) {
-        log.info("getCollectorFor");
         return new MyCollector();
     }
 
@@ -71,6 +80,13 @@ public class QuickfixInlayHintsProvider implements InlayHintsProvider<NoSettings
 
             XmlTag tag = attribute.getParent();
 
+            final String tagName = tag.getName();
+
+            if ("component".equals(tagName)) {
+                handleComponentTag(editor, attributeValue, tag);
+                return true;
+            }
+
             // We're interested in "field" and "group" tags
             if (!"field".equals(tag.getName()) && !"group".equals(tag.getName())) {
                 return true;
@@ -80,25 +96,54 @@ public class QuickfixInlayHintsProvider implements InlayHintsProvider<NoSettings
             String fieldName = attributeValue.getValue();
 
             // Find the tag number
-            final XmlTag fieldTag = findField(getRootTag(tag), fieldName);
+            final XmlTag field = findField(getRootTag(tag), fieldName);
 
-            String tagNumber = fieldTag != null ? fieldTag.getAttributeValue("number") : null;
-            String fieldType = fieldTag != null ? fieldTag.getAttributeValue("type") : null;
+            String tagNumber = field != null ? field.getAttributeValue("number") : "";
+            String fieldType = field != null ? field.getAttributeValue("type") : "";
 
-            maybeAddTagNumber(editor, sink, attributeValue, tagNumber);
-            maybeAddFieldType(editor, sink, attributeValue, fieldType);
+            maybePresent(editor, sink, attributeValue, tagNumber, fieldType);
 
             return true;
         }
 
-        private void maybeAddTagNumber(Editor editor, InlayHintsSink sink, XmlAttributeValue attributeValue, String tagNumber) {
-            if (tagNumber == null) {
+
+        private void handleComponentTag(
+                final Editor editor,
+                final XmlAttributeValue attributeValue,
+                final XmlTag tag
+        ) {
+
+            int offset = attributeValue.getTextRange().getEndOffset();
+
+            // print something when the attributeValue is clicked
+            InlayPresentation textPresentation = new PresentationFactory(editor).text("Click me!");
+            InlayPresentation centeredPresentation = new InsetPresentation(
+                    textPresentation,
+                    0,              // Left inset
+                    0,             // Right inset
+                    TOP_INSET,     // Top inset
+                    BOTTOM_INSET   // Bottom inset
+            );
+
+            // Add the inlay hint
+
+
+        }
+
+        private void maybePresent(
+                final Editor editor,
+                final InlayHintsSink sink,
+                final XmlAttributeValue attributeValue,
+                final String tagNumber,
+                final String fieldType
+        ) {
+            if ( "".equals(tagNumber) && "".equals(fieldType)) {
                 return;
             }
 
             // Create the inlay presentation
             PresentationFactory factory = new PresentationFactory(editor);
-            InlayPresentation textPresentation = factory.text(" (" + tagNumber + ")");
+            InlayPresentation textPresentation = factory.text(" " + tagNumber + " " + fieldType + " ");
 
             // Wrap with InsetPresentation
             InlayPresentation centeredPresentation = new InsetPresentation(
@@ -112,30 +157,6 @@ public class QuickfixInlayHintsProvider implements InlayHintsProvider<NoSettings
             int offset = attributeValue.getTextRange().getEndOffset();
             sink.addInlineElement(offset, false, centeredPresentation, false);
         }
-
-        private void maybeAddFieldType(Editor editor, InlayHintsSink sink, XmlAttributeValue attributeValue, String fieldType) {
-            if (fieldType == null) {
-                return;
-            }
-
-            // Create the inlay presentation
-            PresentationFactory factory = new PresentationFactory(editor);
-            InlayPresentation textPresentation = factory.text(" (" + fieldType + ")");
-
-            // Wrap with InsetPresentation
-            InlayPresentation centeredPresentation = new InsetPresentation(
-                    textPresentation,
-                    0,              // Left inset
-                    0,             // Right inset
-                    TOP_INSET,     // Top inset
-                    BOTTOM_INSET   // Bottom inset
-            );
-
-            int offset = attributeValue.getTextRange().getEndOffset();
-            sink.addInlineElement(offset, false, centeredPresentation, false);
-        }
-
-
 
         private @Nullable XmlTag findField(PsiElement root, String fieldName) {
             if (!(root instanceof XmlTag rootTag)) {
@@ -156,18 +177,6 @@ public class QuickfixInlayHintsProvider implements InlayHintsProvider<NoSettings
             return null;
         }
 
-
-        // Helper method to navigate to the root tag
-        private @Nullable XmlTag getRootTag(PsiElement element) {
-            PsiElement current = element;
-            while (current != null && !(current instanceof PsiFile)) {
-                if (current instanceof XmlTag && "fix".equals(((XmlTag) current).getName())) {
-                    return (XmlTag) current;
-                }
-                current = current.getParent();
-            }
-            return null;
-        }
     }
 
     @Override

@@ -2,4 +2,6 @@
 .idea
 .intellijPlatform
 .qodana
+.kotlin
+notes.txt
 build
