@@ -30,6 +30,10 @@
         />
     </extensions>
 
+    <extensions defaultExtensionNs="com.intellij.platform.backend.documentation">
+        <targetProvider implementation="ac.quant.quickfixspec.documentation.QuickfixComponentDocumentationTargetProvider"/>
+    </extensions>
+
     <extensions defaultExtensionNs="com.intellij">
         <editorFloatingToolbarProvider implementation="ac.quant.quickfixspec.toolbar.QuickfixFloatingToolbar"/>
         <psi.referenceContributor language="XML" implementation="ac.quant.quickfixspec.clickableviews.QuickfixSpecPsiReferenceContributor"/>
