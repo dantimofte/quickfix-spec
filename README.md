@@ -21,6 +21,8 @@ This Plugin is going to make it easier to work with the QuickFix XML Specificati
 
  - shows the field number next to the field or group name
  - shows the field type next to the field or group name
+ - use ctrl/cmd + click on the component name to navigate to the definition
+ - when mouse is hovering over a component name the component definition is displayed
  
 <!-- Plugin description end -->
 
