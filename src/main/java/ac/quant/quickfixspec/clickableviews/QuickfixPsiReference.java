@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
+import static ac.quant.quickfixspec.common.PsiUtils.findComponent;
 import static ac.quant.quickfixspec.common.PsiUtils.getRootTag;
 
 @Slf4j
@@ -40,25 +41,7 @@ public class QuickfixPsiReference implements PsiReference {
     @Override
     public @Nullable PsiElement resolve() {
         String componentName = attributeValue.getValue();
-        return findComponent(componentName);
-    }
-
-    private @Nullable XmlTag findComponent(String componentName) {
-        if (rootTag == null) {
-            return null;
-        }
-
-        XmlTag[] componentsTags = rootTag.findSubTags("components");
-
-        for (XmlTag componentsTag : componentsTags) {
-            for (XmlTag componentTag : componentsTag.findSubTags("component")) {
-                String nameAttr = componentTag.getAttributeValue("name");
-                if (componentName.equals(nameAttr)) {
-                    return componentTag;
-                }
-            }
-        }
-        return null;
+        return findComponent(rootTag, componentName);
     }
 
     @Override
