@@ -7,7 +7,6 @@ import com.intellij.platform.backend.documentation.DocumentationResult
 import com.intellij.platform.backend.documentation.DocumentationTarget
 import com.intellij.platform.backend.presentation.TargetPresentation
 import com.intellij.psi.xml.XmlTag
-import com.intellij.openapi.diagnostic.Logger
 
 @Suppress("UnstableApiUsage")
 class QuickfixComponentDocumentationTarget(
@@ -37,7 +36,6 @@ class QuickfixComponentDocumentationTarget(
     private fun getComponentDetails(componentName: String): String {
         val component: XmlTag? = findComponent(rootTag, componentName)
         if (component == null) {
-            println("Component with name $componentName not found")
             return ""
         }
 
