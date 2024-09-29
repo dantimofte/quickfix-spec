@@ -34,11 +34,8 @@ class QuickfixComponentDocumentationTarget(
     }
 
     private fun getComponentDetails(componentName: String): String {
-        val component: XmlTag? = findComponent(rootTag, componentName)
-        if (component == null) {
-            return ""
-        }
-
+        var component: XmlTag? = findComponent(rootTag, componentName)
+        component ?: return ""
         return getDisplayText(component)
     }
 
