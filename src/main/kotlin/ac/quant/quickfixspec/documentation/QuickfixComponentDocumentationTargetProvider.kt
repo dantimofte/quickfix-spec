@@ -1,7 +1,5 @@
 package ac.quant.quickfixspec.documentation
 
-//class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider {
-
 import ac.quant.quickfixspec.common.PsiUtils.getRootTag
 import com.intellij.platform.backend.documentation.DocumentationTarget
 import com.intellij.platform.backend.documentation.DocumentationTargetProvider
