@@ -8,7 +8,7 @@ import com.intellij.util.ProcessingContext;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
-import static ac.quant.quickfixspec.common.PsiUtils.isComponentsDeclaration;
+import static ac.quant.quickfixspec.common.PsiUtils.isTagDeclaration;
 
 @Slf4j
 public class QuickFixPsiReferenceProvider extends PsiReferenceProvider {
@@ -23,7 +23,7 @@ public class QuickFixPsiReferenceProvider extends PsiReferenceProvider {
 
         XmlAttributeValue attributeValue = (XmlAttributeValue) element;
 
-        if (isComponentsDeclaration(attributeValue)) {
+        if (isTagDeclaration(attributeValue)) {
             return PsiReference.EMPTY_ARRAY;
         }
 

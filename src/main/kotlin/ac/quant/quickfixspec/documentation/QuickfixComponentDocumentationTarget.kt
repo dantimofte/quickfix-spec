@@ -1,7 +1,7 @@
 package ac.quant.quickfixspec.documentation
 
 
-import ac.quant.quickfixspec.common.PsiUtils.findComponent
+import ac.quant.quickfixspec.common.PsiUtils.findDefinition
 import com.intellij.model.Pointer
 import com.intellij.platform.backend.documentation.DocumentationResult
 import com.intellij.platform.backend.documentation.DocumentationTarget
@@ -10,7 +10,8 @@ import com.intellij.psi.xml.XmlTag
 
 @Suppress("UnstableApiUsage")
 class QuickfixComponentDocumentationTarget(
-    private val componentName: String,
+    private val tagName: String,
+    private val parentTagName: String,
     private val rootTag: XmlTag?
 ) : DocumentationTarget {
 
@@ -20,7 +21,7 @@ class QuickfixComponentDocumentationTarget(
     }
 
     override fun computePresentation(): TargetPresentation {
-        return TargetPresentation.builder(componentName).presentation()
+        return TargetPresentation.builder(tagName).presentation()
     }
 
     override fun computeDocumentationHint(): String {
@@ -29,21 +30,21 @@ class QuickfixComponentDocumentationTarget(
     }
 
     override fun computeDocumentation(): DocumentationResult {
-        val componentDetails = getComponentDetails(componentName)
+        val componentDetails = getTagDetails(tagName)
         return DocumentationResult.documentation(componentDetails)
     }
 
-    private fun getComponentDetails(componentName: String): String {
-        val component: XmlTag? = findComponent(rootTag, componentName)
-        component ?: return ""
-        return getDisplayText(component)
+    private fun getTagDetails(tagName: String): String {
+        val tag: XmlTag? = findDefinition(tagName, parentTagName, rootTag)
+        tag ?: return ""
+        return getDisplayText(tag)
     }
 
-    private fun getDisplayText(component: XmlTag): String {
-        val text = component.children.joinToString("") { it.text }
+    private fun getDisplayText(tag: XmlTag): String {
+        val text = tag.children.joinToString("") { it.text }
         val xmlEscapedText = xmlEscaped(text)
         val indentationRemoved = indentationRemoved(xmlEscapedText)
-        val displayText = "<html><body><h1>${component.name}</h1><pre>$indentationRemoved</pre></body></html>"
+        val displayText = "<html><body><h1>${tag.name}</h1><pre>$indentationRemoved</pre></body></html>"
         return displayText
     }
 

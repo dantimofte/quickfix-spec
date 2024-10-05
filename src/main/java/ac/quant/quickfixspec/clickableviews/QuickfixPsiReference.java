@@ -10,18 +10,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
-import static ac.quant.quickfixspec.common.PsiUtils.findComponent;
-import static ac.quant.quickfixspec.common.PsiUtils.getRootTag;
+import static ac.quant.quickfixspec.common.PsiUtils.*;
 
 @Slf4j
 public class QuickfixPsiReference implements PsiReference {
 
     private final XmlAttributeValue attributeValue;
     private final XmlTag rootTag;
+    private final String parentTagName;
 
     public QuickfixPsiReference(final XmlAttributeValue attributeValue) {
         this.attributeValue = attributeValue;
+        this.parentTagName = ((XmlTag) attributeValue.getParent().getParent()).getName();
         this.rootTag = getRootTag(attributeValue);
     }
 
@@ -37,8 +37,8 @@ public class QuickfixPsiReference implements PsiReference {
 
     @Override
     public @Nullable PsiElement resolve() {
-        String componentName = attributeValue.getValue();
-        return findComponent(rootTag, componentName);
+        String tagName = attributeValue.getValue();
+        return findDefinition(tagName, parentTagName, rootTag);
     }
 
     @Override
