@@ -1,5 +1,6 @@
 package ac.quant.quickfixspec.common;
 
+import com.github.weisj.jsvg.S;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlAttribute;
@@ -68,10 +69,6 @@ public class PsiUtils {
 
         final String parentTagName = parentTag.getName();
 
-        if (DEFINITION_GROUP_NAME.containsValue(parentTagName)) {
-            return true;
-        }
-
-        return false;
+        return DEFINITION_GROUP_NAME.containsValue(parentTagName);
     }
 }
