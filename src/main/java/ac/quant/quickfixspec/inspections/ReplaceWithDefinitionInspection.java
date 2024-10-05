@@ -10,12 +10,8 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.psi.xml.XmlAttributeValue;
-import com.intellij.psi.xml.XmlAttribute;
-import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import static ac.quant.quickfixspec.common.PsiUtils.*;
 
