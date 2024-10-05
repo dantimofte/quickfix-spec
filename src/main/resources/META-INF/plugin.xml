@@ -35,6 +35,7 @@
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
+        <localInspection displayName="Expand component" groupName="Quickfix spec" language="XML" implementationClass="ac.quant.quickfixspec.inspections.ReplaceWithDefinitionInspection"/>
         <editorFloatingToolbarProvider implementation="ac.quant.quickfixspec.toolbar.QuickfixFloatingToolbar"/>
         <psi.referenceContributor language="XML" implementation="ac.quant.quickfixspec.clickableviews.QuickfixSpecPsiReferenceContributor"/>
     </extensions>

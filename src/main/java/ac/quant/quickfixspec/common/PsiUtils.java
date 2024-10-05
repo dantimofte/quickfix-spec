@@ -68,10 +68,6 @@ public class PsiUtils {
 
         final String parentTagName = parentTag.getName();
 
-        if (DEFINITION_GROUP_NAME.containsValue(parentTagName)) {
-            return true;
-        }
-
-        return false;
+        return DEFINITION_GROUP_NAME.containsValue(parentTagName);
     }
 }
