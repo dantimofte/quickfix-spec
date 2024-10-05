@@ -8,16 +8,20 @@ import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.xml.XmlAttributeValue;
 import org.jetbrains.annotations.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import static ac.quant.quickfixspec.common.PsiUtils.NAME_ATTRIBUTE;
+import static ac.quant.quickfixspec.common.PsiUtils.TAGS_WITH_DEFINITION;
 
 @Slf4j
 public class QuickfixSpecPsiReferenceContributor extends PsiReferenceContributor {
 
+
     @Override
     public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
 
+
         PsiElementPattern.Capture<XmlAttributeValue> psiElementCapture =  PlatformPatterns.psiElement(XmlAttributeValue.class)
-                .withParent(XmlPatterns.xmlAttribute().withName("name"))
-                .withSuperParent(2, XmlPatterns.xmlTag().withName("component"));
+                .withParent(XmlPatterns.xmlAttribute().withName(NAME_ATTRIBUTE))
+                .withSuperParent(2, XmlPatterns.xmlTag().withName(TAGS_WITH_DEFINITION));
 
         registrar.registerReferenceProvider(
                 psiElementCapture,

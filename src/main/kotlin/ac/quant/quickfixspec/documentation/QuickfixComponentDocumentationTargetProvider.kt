@@ -1,5 +1,8 @@
 package ac.quant.quickfixspec.documentation
 
+import ac.quant.quickfixspec.common.PsiUtils.NAME_ATTRIBUTE
+import ac.quant.quickfixspec.common.PsiUtils.TAGS_WITH_DEFINITION
+import ac.quant.quickfixspec.common.PsiUtils.DEFINITION_GROUP_NAME
 import ac.quant.quickfixspec.common.PsiUtils.getRootTag
 import com.intellij.platform.backend.documentation.DocumentationTarget
 import com.intellij.platform.backend.documentation.DocumentationTargetProvider
@@ -22,24 +25,27 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
             rootTag = getRootTag(attribute)
         }
 
-        if ("name" != attribute.name) {
+        if (NAME_ATTRIBUTE != attribute.name) {
             return emptyList()
         }
 
         val tag = attribute.parent as? XmlTag ?: return emptyList()
 
-        if ("component" != tag.name) {
+        if (tag.name !in TAGS_WITH_DEFINITION) {
             return emptyList()
         }
 
         val tagParent = tag.parent as? XmlTag ?: return emptyList()
 
-        if ("components" == tagParent.name) {
+
+        //  skip definition when tagParent.name is "components" or "fields"
+
+        if (tagParent.name in DEFINITION_GROUP_NAME.values) {
             return emptyList()
         }
 
-        val componentName = attribute.value ?: return emptyList()
-        return listOf(QuickfixComponentDocumentationTarget(componentName, rootTag))
+        val attrNameValue = attribute.value ?: return emptyList()
+        return listOf(QuickfixComponentDocumentationTarget(attrNameValue, tag.name, rootTag))
 
     }
 
