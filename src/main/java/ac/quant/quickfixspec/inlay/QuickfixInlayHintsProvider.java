@@ -27,7 +27,7 @@ public class QuickfixInlayHintsProvider implements InlayHintsProvider<NoSettings
 
     @Override
     public @NotNull String getName() {
-        return "Quickfix tag inlay hints";
+        return "Fix tag inlay hints";
     }
 
     @Override
@@ -42,6 +42,30 @@ public class QuickfixInlayHintsProvider implements InlayHintsProvider<NoSettings
             @NotNull NoSettings settings,
             @NotNull InlayHintsSink sink) {
         return new MyCollector();
+    }
+
+    @Override
+    public boolean isLanguageSupported(@NotNull Language language) {
+        return language.isKindOf(XMLLanguage.INSTANCE);
+    }
+
+    public @NotNull SettingsKey<NoSettings> getSettingsKey() {
+        return KEY;
+    }
+
+    @Override
+    public @NotNull String getPreviewText() {
+        return "";
+    }
+
+    @Override
+    public @NotNull ImmediateConfigurable createConfigurable(@NotNull NoSettings settings) {
+        return new ImmediateConfigurable() {
+            @Override
+            public @NotNull JComponent createComponent(@NotNull ChangeListener changeListener) {
+                return new JPanel();
+            }
+        };
     }
 
     private static class MyCollector implements InlayHintsCollector {
@@ -170,28 +194,5 @@ public class QuickfixInlayHintsProvider implements InlayHintsProvider<NoSettings
 
     }
 
-    @Override
-    public boolean isLanguageSupported(@NotNull Language language) {
-        return language.isKindOf(XMLLanguage.INSTANCE);
-    }
-
-    public @NotNull SettingsKey<NoSettings> getSettingsKey() {
-        return KEY;
-    }
-
-    @Override
-    public @NotNull String getPreviewText() {
-        return "";
-    }
-
-    @Override
-    public @NotNull ImmediateConfigurable createConfigurable(@NotNull NoSettings settings) {
-        return new ImmediateConfigurable() {
-            @Override
-            public @NotNull JComponent createComponent(@NotNull ChangeListener changeListener) {
-                return new JPanel();
-            }
-        };
-    }
 }
 

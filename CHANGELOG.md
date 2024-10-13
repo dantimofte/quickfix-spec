@@ -12,3 +12,4 @@
 - v0.3.0 Cmd click for fields and groups to go to the field definition
 - v0.3.0 Mouse hovering over a field or group name will display the field definition
 - v0.3.0 Add Inspection to replace component reference with the full component definition
+- v0.4.0 Mouse hovering over a fix message will display the fix message details

@@ -26,6 +26,7 @@
     <extensions defaultExtensionNs="com.intellij.codeInsight">
         <inlayProvider
                 implementationClass="ac.quant.quickfixspec.inlay.QuickfixInlayHintsProvider"
+                isEnabledByDefault="true"
                 language="XML"
         />
     </extensions>
