@@ -1,33 +1,29 @@
 package ac.quant.quickfixspec.common
 
 import com.intellij.psi.xml.XmlTag
+import lombok.Getter
 
-class FixField {
-    val name: String
-    val number: String
-    val fixType: String
-    val values: Map<String, String>
+@Getter
+class FixField(tag: XmlTag) {
+    val name: String = parseName(tag)
+    val number: String = parseNumber(tag)
+    val fixType: String = parseFixType(tag)
+    val values: Map<String, String> = parseValues(tag)
 
-    constructor(tag: XmlTag) {
-        this.name = getName(tag)
-        this.number = getNumber(tag)
-        this.fixType = getFixType(tag)
-        this.values = getValues(tag)
-    }
 
-    private fun getName(tag: XmlTag): String {
+    private fun parseName(tag: XmlTag): String {
         return getAttributeValue(tag, "name")
     }
 
-    private fun getNumber(tag: XmlTag): String {
+    private fun parseNumber(tag: XmlTag): String {
         return getAttributeValue(tag, "number")
     }
 
-    private fun getFixType(tag: XmlTag): String {
+    private fun parseFixType(tag: XmlTag): String {
         return getAttributeValue(tag, "type")
     }
 
-    private fun getValues(tag: XmlTag): Map<String, String> {
+    private fun parseValues(tag: XmlTag): Map<String, String> {
         val valueTags = tag.findSubTags("value")
         val valueTagsDict = mutableMapOf<String, String>()
         for (valueTag in valueTags) {

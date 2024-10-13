@@ -18,7 +18,7 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
 
 
     var rootTag: XmlTag? = null
-    var fixDataDictionaryService: FixDataDictionaryService? = null
+    private var fixDataDictionaryService: FixDataDictionaryService? = null
 
 
     override fun documentationTargets(file: PsiFile, offset: Int): List<DocumentationTarget> {
@@ -33,7 +33,7 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
 
     }
 
-    fun getTagDefinition(element: PsiElement):  List<DocumentationTarget> {
+    private fun getTagDefinition(element: PsiElement):  List<DocumentationTarget> {
         val attributeValue = element.parent as? XmlAttributeValue ?: return emptyList()
         val attribute = attributeValue.parent as? XmlAttribute ?: return emptyList()
 
@@ -64,7 +64,7 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
     }
 
     // search for strings that are actually fix messages and return them with the actual name of the tag number based on the xml file
-    fun getFixMessageDetails(file: PsiFile, element: PsiElement): List<DocumentationTarget> {
+    private fun getFixMessageDetails(file: PsiFile, element: PsiElement): List<DocumentationTarget> {
         fixDataDictionaryService = file.project.getService(FixDataDictionaryService::class.java)
 
         val fixMessages = mutableListOf<DocumentationTarget>()
@@ -73,7 +73,7 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
         for (match in matches) {
             val fixMessage= match.value
             // if group 0 is empty then try group 1
-            val fixDelimiter = if (match.groupValues[1].isNotEmpty()) match.groupValues[1] else match.groupValues[2]
+            val fixDelimiter = match.groupValues[1].ifEmpty{ match.groupValues[2] }
 
             fixMessages.add(FixMessageDocumentationTarget(fixMessage, fixDelimiter, fixDataDictionaryService!!))
         }

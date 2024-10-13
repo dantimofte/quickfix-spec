@@ -11,27 +11,21 @@ import java.net.URL
 @Service(Service. Level. PROJECT)
 class FixDataDictionaryService(private val project: Project) {
 
-    var fields: FixFields? = null
+    private var fields: FixFields? = null
 
     init {
         loadFixSpecs()
     }
 
-    fun loadFixSpecs() {
+    private fun loadFixSpecs() {
         val filePath: URL? = this::class.java.getResource("/spec/FIX44.xml")
-        if (filePath == null) {
-            return
-        }
 
         val fixSpecs : PsiFile? = PsiFileFactory.getInstance(project).createFileFromText(
             "FIX40.xml",
             XMLLanguage.INSTANCE,
-            filePath.readText()
+            filePath!!.readText()
         )
 
-        if (fixSpecs == null) {
-            return
-        }
         fields = getFields(fixSpecs as XmlFile)
     }
 

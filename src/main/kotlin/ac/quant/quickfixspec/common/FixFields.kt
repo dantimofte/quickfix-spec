@@ -2,11 +2,11 @@ package ac.quant.quickfixspec.common
 
 import com.intellij.psi.xml.XmlTag
 
-class FixFields {
-    var fieldsByNum: Map<String, FixField>
-    var fieldsByName: Map<String, FixField>
+class FixFields(fieldsTag: XmlTag) {
+    private val fieldsByNum: Map<String, FixField>
+    private val fieldsByName: Map<String, FixField>
 
-    constructor(fieldsTag: XmlTag) {
+    init {
         val result = getFields(fieldsTag)
         fieldsByNum = result[0]
         fieldsByName = result[1]
@@ -29,10 +29,6 @@ class FixFields {
 
     fun getTagName(tagNumber: String): String {
         return fieldsByNum[tagNumber]?.name ?: ""
-    }
-
-    fun getTagNumber(tag: String): String {
-        return fieldsByName[tag]?.number ?: ""
     }
 
     fun getTagValueDefinition(tag: String, value: String): String {
