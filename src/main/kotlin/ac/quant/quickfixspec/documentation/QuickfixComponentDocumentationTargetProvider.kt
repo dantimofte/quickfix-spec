@@ -1,10 +1,11 @@
 package ac.quant.quickfixspec.documentation
 
-import ac.quant.quickfixspec.common.FixDataDictionaryService
+import ac.quant.quickfixspec.common.spec.FixDataDictionaryService
 import ac.quant.quickfixspec.common.PsiUtils.NAME_ATTRIBUTE
 import ac.quant.quickfixspec.common.PsiUtils.TAGS_WITH_DEFINITION
 import ac.quant.quickfixspec.common.PsiUtils.DEFINITION_GROUP_NAME
 import ac.quant.quickfixspec.common.PsiUtils.getRootTag
+import ac.quant.quickfixspec.common.parsed.ParsedFixMessage
 import com.intellij.platform.backend.documentation.DocumentationTarget
 import com.intellij.platform.backend.documentation.DocumentationTargetProvider
 import com.intellij.psi.PsiElement
@@ -28,7 +29,7 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
         return if (file.name.endsWith(".xml")) {
             getTagDefinition(element)
         } else {
-            getFixMessageDetails(file, element)
+            getFixMessageDetails(file, element, offset)
         }
 
     }
@@ -53,8 +54,6 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
 
         val tagParent = tag.parent as? XmlTag ?: return emptyList()
 
-        //  skip definition when tagParent.name is "components" or "fields"
-
         if (tagParent.name in DEFINITION_GROUP_NAME.values) {
             return emptyList()
         }
@@ -63,19 +62,24 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
         return listOf(QuickfixComponentDocumentationTarget(attrNameValue, tag.name, rootTag))
     }
 
-    // search for strings that are actually fix messages and return them with the actual name of the tag number based on the xml file
-    private fun getFixMessageDetails(file: PsiFile, element: PsiElement): List<DocumentationTarget> {
+    private fun getFixMessageDetails(file: PsiFile, element: PsiElement, offset: Int): List<DocumentationTarget> {
         fixDataDictionaryService = file.project.getService(FixDataDictionaryService::class.java)
 
         val fixMessages = mutableListOf<DocumentationTarget>()
-        val fixMessageRegex = Regex("8=FIX.*?10=[0-9]{3}(\\\\u0001)?(.)?")
-        val matches = fixMessageRegex.findAll(element.text)
-        for (match in matches) {
-            val fixMessage= match.value
-            // if group 0 is empty then try group 1
-            val fixDelimiter = match.groupValues[1].ifEmpty{ match.groupValues[2] }
 
-            fixMessages.add(FixMessageDocumentationTarget(fixMessage, fixDelimiter, fixDataDictionaryService!!))
+        val regexOptionsSet = setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.COMMENTS, RegexOption.IGNORE_CASE)
+        val multiLineFixMessageRegex = Regex("8=FIX.*?10=[0-9]{3}(\\\\u0001)?(.)?", regexOptionsSet)
+        val fileText = file.text.substring(element.textOffset)
+
+        val matches = multiLineFixMessageRegex.findAll(fileText)
+        for (match in matches) {
+            val fixMessage = match.value
+            val fixDelimiter = match.groupValues[1].ifEmpty { match.groupValues[2] }
+            if (match.range.contains(offset)) {
+                val parsedFixMessage = ParsedFixMessage(fixMessage, fixDelimiter, fixDataDictionaryService!!)
+                val fixMessageDocumentationTarget = FixMessageDocumentationTarget(parsedFixMessage)
+                fixMessages.add(fixMessageDocumentationTarget)
+            }
         }
 
         return fixMessages

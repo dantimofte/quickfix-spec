@@ -4,7 +4,7 @@
     <name>Quickfix XML Spec</name>
     <vendor>Dan Timofte</vendor>
     <description>
-        Adds inlay with the tag number to fields and groups in quickfix XML files.
+        Help for Quickfix XML files. FIX protocol message preview, inlay hints, documentation, and more.
     </description>
     <depends>com.intellij.modules.platform</depends>
 
