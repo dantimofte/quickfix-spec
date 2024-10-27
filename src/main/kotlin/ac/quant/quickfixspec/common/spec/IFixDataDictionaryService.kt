@@ -11,7 +11,7 @@ interface IFixDataDictionaryService {
     val trailer: MessageElement
 
     fun getFieldByNumber(number: String): FieldElement {
-        val field = fields.valueByNumber.get(number) as FieldElement?
+        val field = fields.valueByNumber[number] as FieldElement?
         return field ?: FieldElement(rootTag, this)
     }
 }

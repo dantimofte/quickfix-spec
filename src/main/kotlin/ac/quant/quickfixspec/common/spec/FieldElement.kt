@@ -10,7 +10,7 @@ class FieldElement: IElement {
     override val number: String
     override val elementTag: XmlTag
     override val fixDataDictionary: IFixDataDictionaryService
-    val fixType: String
+    private val fixType: String
     val values: Map<String, String>
     val value: String
 

@@ -6,7 +6,7 @@ class MessageElement(override val name: String, override val  type : ElementType
     override val number: String = fixDataDictionary.fields.valuesByName[name]?.number ?: ""
     private val msgType : String = elementTag.getAttribute("msgtype")?.value ?: ""
     private val msgCat : String = elementTag.getAttribute("msgcat")?.value ?: ""
-    override val fields: MutableList<FieldElement> = mutableListOf<FieldElement>()
+    override val fields: MutableList<FieldElement> = mutableListOf()
     override val components: MutableMap<String, ComponentElement> = mutableMapOf()
     override val groups: MutableMap<String, GroupElement> = mutableMapOf()
 
