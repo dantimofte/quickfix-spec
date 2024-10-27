@@ -4,9 +4,9 @@ import com.intellij.notification.*
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 
+private const val GROUP_DISPLAY_ID = "Display ID"
 
 class ShowNotificationSampleAction : AnAction() {
-    private val GROUP_DISPAY_ID = "UI Samples"
     private val messageTitle = "Title of notification"
     private val messageDetails = "Details of notification"
 
@@ -15,7 +15,7 @@ class ShowNotificationSampleAction : AnAction() {
     }
 
     private fun aNotification() {
-        val notification = Notification(GROUP_DISPAY_ID,
+        val notification = Notification(GROUP_DISPLAY_ID,
             "1 .$messageTitle",
             "1 .$messageDetails",
             NotificationType.INFORMATION)

@@ -18,7 +18,7 @@ import com.intellij.psi.xml.XmlAttributeValue
 class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider {
 
 
-    var rootTag: XmlTag? = null
+    private var rootTag: XmlTag? = null
     private var fixDataDictionaryService: FixDataDictionaryService? = null
 
 
