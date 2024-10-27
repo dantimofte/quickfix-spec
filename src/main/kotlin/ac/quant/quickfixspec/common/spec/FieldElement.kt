@@ -14,6 +14,10 @@ class FieldElement: IElement {
     val values: Map<String, String>
     val value: String
 
+    override val fields: MutableList<FieldElement> = mutableListOf()
+    override val components: MutableMap<String, ComponentElement> = mutableMapOf()
+    override val groups: MutableMap<String, GroupElement> = mutableMapOf()
+
     constructor(xmlTag: XmlTag, fixDataDictionary: IFixDataDictionaryService) {
         this.name = ""
         this.type = ElementType.FIELD

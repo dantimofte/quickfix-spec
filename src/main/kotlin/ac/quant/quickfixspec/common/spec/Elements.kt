@@ -1,18 +1,11 @@
 package ac.quant.quickfixspec.common.spec
 
-import com.intellij.psi.xml.XmlTag
-
-class Elements {
+class Elements(private val elementsType: ElementType,private val fixDataDictionary: IFixDataDictionaryService) {
     val valuesByName:  Map<String, IElement>
     val valueByNumber: Map<String, IElement>
-    val elementsType: ElementType
-    val fixDataDictionary: IFixDataDictionaryService
 
-    // This constructor is used for fields
-    constructor(elementType: ElementType, fixDataDictionary: IFixDataDictionaryService ) {
-        this.elementsType = elementType
-        this.fixDataDictionary = fixDataDictionary
-        when (elementType) {
+    init {
+        when (elementsType) {
             ElementType.FIELD -> {
                 valuesByName = parseElements()
                 valueByNumber = valuesByName.values.associateBy { it.number }
@@ -41,7 +34,7 @@ class Elements {
         parseGroups()
     }
 
-    fun initSubComponents() {
+    private fun initSubComponents() {
         for (component in valuesByName.values) {
             if (component !is ComponentElement) {
                 continue
@@ -50,7 +43,7 @@ class Elements {
         }
     }
 
-    fun parseGroups() {
+    private fun parseGroups() {
         for (element in valuesByName.values) {
             element.parseGroups()
         }
@@ -62,9 +55,8 @@ class Elements {
         try {
             val xmlTag = fixDataDictionary.rootTag.findSubTags(elementsType.xmlContainerName)
             for (elementTag in xmlTag.first().subTags) {
-                var tagName = elementTag.name
                 val elementName = elementTag.getAttribute("name")?.value ?: ""
-                when (tagName) {
+                when (elementTag.name) {
                     "field" -> {
                         mutableName[elementName] = FieldElement(elementName, elementsType, elementTag, fixDataDictionary)
                     }

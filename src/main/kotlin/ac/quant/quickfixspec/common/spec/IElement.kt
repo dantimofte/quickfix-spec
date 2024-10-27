@@ -9,6 +9,11 @@ interface IElement {
     val elementTag: XmlTag
     val fixDataDictionary: IFixDataDictionaryService
 
+    val fields: MutableList<FieldElement>
+    val components: MutableMap<String, ComponentElement>
+    val groups: MutableMap<String, GroupElement>
+
+
     fun getAttributeValue(tag: XmlTag, attributeName: String): String {
         return tag.getAttribute(attributeName)?.value ?: ""
     }

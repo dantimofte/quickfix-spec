@@ -1,7 +1,5 @@
 package ac.quant.quickfixspec.documentation
 import ac.quant.quickfixspec.common.parsed.ParsedFixMessage
-import ac.quant.quickfixspec.common.spec.FieldElement
-import ac.quant.quickfixspec.common.spec.IFixDataDictionaryService
 import com.intellij.model.Pointer
 import com.intellij.platform.backend.documentation.DocumentationResult
 import com.intellij.platform.backend.documentation.DocumentationTarget

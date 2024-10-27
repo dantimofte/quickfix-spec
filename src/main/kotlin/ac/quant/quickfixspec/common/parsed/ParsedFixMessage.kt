@@ -3,27 +3,21 @@ package ac.quant.quickfixspec.common.parsed
 import ac.quant.quickfixspec.common.spec.FieldElement
 import ac.quant.quickfixspec.common.spec.IFixDataDictionaryService
 
-class ParsedFixMessage {
-    private val message: String
-    private val delimiter: String
-    lateinit var msgType: String
+class ParsedFixMessage(private val message: String, private val delimiter: String, private val fixDataDictionary: IFixDataDictionaryService) {
+    private lateinit var msgType: String
     lateinit var msgName: String
-    private val fixDataDictionary: IFixDataDictionaryService
 
     private val headerFields = mutableListOf<FieldElement>()
 
-    constructor(message: String, delimiter: String, dictionaryService: IFixDataDictionaryService) {
-        this.message = message
-        this.delimiter = delimiter
-        this.fixDataDictionary = dictionaryService
+    init {
         parseMessage()
     }
 
-    fun parseMessage() {
+    private fun parseMessage() {
         val messageParts = message.split(delimiter)
 
         for (part in messageParts) {
-            var tagNumber = clean(part.substringBefore("="))
+            val tagNumber = clean(part.substringBefore("="))
 
             if (tagNumber.isEmpty()) {
                 continue
@@ -62,7 +56,7 @@ class ParsedFixMessage {
         val messageParts = message.split(delimiter)
 
         val formattedMessage = messageParts.subList(0, messageParts.size - 1).joinToString("\n") {
-            var fieldNumber = clean(it.substringBefore("="))
+            val fieldNumber = clean(it.substringBefore("="))
             val fieldValue = it.substringAfter("=")
             val field = fixDataDictionary.getFieldByNumber(fieldNumber)
             val fieldValueDefinition = field.values[fieldValue] ?: ""
@@ -75,7 +69,7 @@ class ParsedFixMessage {
         return displayText
     }
 
-    fun getMsgParts(field: FieldElement): String {
+    private fun getMsgParts(field: FieldElement): String {
         return when (true) {
             field.isHeaderField() -> "H"
             field.isTrailerField() -> "T"

@@ -2,26 +2,17 @@ package ac.quant.quickfixspec.common.spec
 
 import com.intellij.psi.xml.XmlTag
 
-class ComponentElement: IElement {
-    override val name: String
+class ComponentElement(override val name: String,override val  type : ElementType,override val  elementTag: XmlTag,override val  fixDataDictionary: IFixDataDictionaryService): IElement {
     override val number: String = ""
-    override val type: ElementType
-    override val elementTag: XmlTag
-    override val fixDataDictionary: IFixDataDictionaryService
 
-    val fields: MutableList<FieldElement> =  mutableListOf<FieldElement>()
-    val components: MutableMap<String, ComponentElement> = mutableMapOf()
-    val groups: MutableMap<String, GroupElement> = mutableMapOf()
+    override val fields: MutableList<FieldElement> =  mutableListOf()
+    override val components: MutableMap<String, ComponentElement> = mutableMapOf()
+    override val groups: MutableMap<String, GroupElement> = mutableMapOf()
 
-    private val componentsNames : MutableList<String> = mutableListOf<String>()
+    private val componentsNames : MutableList<String> = mutableListOf()
     private val groupsTags: MutableMap<String, XmlTag> = mutableMapOf()
 
-
-    constructor(name: String, elementType : ElementType, elementTag: XmlTag, fixDataDictionary: IFixDataDictionaryService) {
-        this.name = name
-        this.type = elementType
-        this.elementTag = elementTag
-        this.fixDataDictionary = fixDataDictionary
+    init {
         parseSubTags(elementTag)
     }
 
@@ -52,7 +43,6 @@ class ComponentElement: IElement {
         for (componentName in componentsNames) {
             val component = fixDataDictionary.components.valuesByName[componentName] as ComponentElement
             components[componentName] = component
-//            subComponent.setSubComponents(componentsElements) #TODO was this needed ?
         }
     }
 

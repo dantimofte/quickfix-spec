@@ -2,29 +2,15 @@ package ac.quant.quickfixspec.common.spec
 
 import com.intellij.psi.xml.XmlTag
 
-class MessageElement: IElement {
-    override val name: String
-    override val number: String
-    override val type: ElementType
-    override val elementTag: XmlTag
-    override val fixDataDictionary: IFixDataDictionaryService
+class MessageElement(override val name: String, override val  type : ElementType, override val  elementTag: XmlTag, override val  fixDataDictionary: IFixDataDictionaryService): IElement {
+    override val number: String = fixDataDictionary.fields.valuesByName[name]?.number ?: ""
+    private val msgType : String = elementTag.getAttribute("msgtype")?.value ?: ""
+    private val msgCat : String = elementTag.getAttribute("msgcat")?.value ?: ""
+    override val fields: MutableList<FieldElement> = mutableListOf<FieldElement>()
+    override val components: MutableMap<String, ComponentElement> = mutableMapOf()
+    override val groups: MutableMap<String, GroupElement> = mutableMapOf()
 
-    val msgType : String
-    val msgCat : String
-    val fields: MutableList<FieldElement> = mutableListOf<FieldElement>()
-    val components: MutableMap<String, ComponentElement> = mutableMapOf()
-    val groups: MutableMap<String, GroupElement> = mutableMapOf()
-
-    constructor(name: String, elementType : ElementType, elementTag: XmlTag, fixDataDictionary: IFixDataDictionaryService) {
-        this.name = name
-        this.type = elementType
-        this.elementTag = elementTag
-        this.fixDataDictionary = fixDataDictionary
-
-        this.number = fixDataDictionary.fields.valuesByName[name]?.number ?: ""
-        this.msgType = elementTag.getAttribute("msgtype")?.value ?: ""
-        this.msgCat = elementTag.getAttribute("msgcat")?.value ?: ""
-
+    init {
         parseSubTags()
     }
 

@@ -2,23 +2,13 @@ package ac.quant.quickfixspec.common.spec
 
 import com.intellij.psi.xml.XmlTag
 
-class GroupElement: IElement {
-    override val name: String
-    override val number: String
-    override val type: ElementType
-    override val elementTag: XmlTag
-    override val fixDataDictionary: IFixDataDictionaryService
-    val fields: MutableList<FieldElement> = mutableListOf<FieldElement>()
-    val components: MutableMap<String, ComponentElement> = mutableMapOf()
+class GroupElement(override val name: String,override val type : ElementType,override val elementTag: XmlTag,override val fixDataDictionary: IFixDataDictionaryService): IElement {
+    override val number: String = fixDataDictionary.fields.valuesByName[name]?.number ?: ""
+    override  val fields: MutableList<FieldElement> = mutableListOf()
+    override val components: MutableMap<String, ComponentElement> = mutableMapOf()
+    override val groups: MutableMap<String, GroupElement> = mutableMapOf()
 
-
-    constructor(name: String, elementType : ElementType, elementTag: XmlTag, fixDataDictionary: IFixDataDictionaryService) {
-        this.name = name
-        this.type = elementType
-        this.elementTag = elementTag
-        this.fixDataDictionary = fixDataDictionary
-        this.number = fixDataDictionary.fields.valuesByName[name]?.number ?: ""
-
+    init {
         parseSubTags()
     }
 
