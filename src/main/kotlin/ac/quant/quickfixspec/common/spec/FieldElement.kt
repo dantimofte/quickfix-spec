@@ -124,4 +124,13 @@ class FieldElement: IElement {
 
         return true
     }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + number.hashCode()
+        result = 31 * result + fixType.hashCode()
+        result = 31 * result + value.hashCode()
+        return result
+    }
   }

@@ -2,9 +2,6 @@ package ac.quant.quickfixspec.common.parsed
 
 import ac.quant.quickfixspec.common.spec.FieldElement
 import ac.quant.quickfixspec.common.spec.IFixDataDictionaryService
-import com.jetbrains.rd.generator.nova.PredefinedType.char
-import org.apache.commons.lang3.math.NumberUtils.toByte
-import java.util.Arrays
 
 class ParsedFixMessage(private val message: String, private val delimiter: String, private val fixDataDictionary: IFixDataDictionaryService) {
     private lateinit var msgType: String
@@ -95,12 +92,20 @@ class ParsedFixMessage(private val message: String, private val delimiter: Strin
         return true
     }
 
-    val delimiterCommonValues: Array<ByteArray> = arrayOf(
+    override fun hashCode(): Int {
+        var result = delimiter.hashCode()
+        result = 31 * result + msgType.hashCode()
+        result = 31 * result + msgName.hashCode()
+        result = 31 * result + headerFields.hashCode()
+        return result
+    }
+
+    private val delimiterCommonValues: Array<ByteArray> = arrayOf(
         byteArrayOf(92, 117, 48, 48, 48, 49),  // "\u0001"
         byteArrayOf(1), // byte representation of 1
     )
 
-    fun delimiterInCommonValues(delimiter: ByteArray): Boolean {
+    private fun delimiterInCommonValues(delimiter: ByteArray): Boolean {
         for (delimiterValue in delimiterCommonValues) {
             if (delimiter.contentEquals(delimiterValue)) {
                 return true
@@ -109,7 +114,7 @@ class ParsedFixMessage(private val message: String, private val delimiter: Strin
         return false
     }
 
-    fun delimiterEquals(other: ParsedFixMessage): Boolean {
+    private fun delimiterEquals(other: ParsedFixMessage): Boolean {
 
         val delimiterByteArray: ByteArray = delimiter.toByteArray()
         val otherDelimiterByteArray: ByteArray = other.delimiter.toByteArray()
@@ -121,7 +126,7 @@ class ParsedFixMessage(private val message: String, private val delimiter: Strin
         return delimiter == other.delimiter
     }
 
-    fun headerFieldsEquals(other: ParsedFixMessage): Boolean {
+    private fun headerFieldsEquals(other: ParsedFixMessage): Boolean {
         if (headerFields.size != other.headerFields.size) return false
 
         for (i in headerFields.indices) {
