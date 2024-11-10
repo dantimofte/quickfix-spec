@@ -13,7 +13,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
 import com.intellij.psi.xml.XmlAttributeValue
-
+import com.google.common.annotations.VisibleForTesting
 
 class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider {
 
@@ -31,7 +31,6 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
         } else {
             getFixMessageDetails(file, element, offset)
         }
-
     }
 
     private fun getTagDefinition(element: PsiElement):  List<DocumentationTarget> {
@@ -62,7 +61,8 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
         return listOf(QuickfixComponentDocumentationTarget(attrNameValue, tag.name, rootTag))
     }
 
-    private fun getFixMessageDetails(file: PsiFile, element: PsiElement, offset: Int): List<DocumentationTarget> {
+    @VisibleForTesting
+    internal fun getFixMessageDetails(file: PsiFile, element: PsiElement, offset: Int): List<DocumentationTarget> {
         fixDataDictionaryService = file.project.getService(FixDataDictionaryService::class.java)
 
         val fixMessages = mutableListOf<DocumentationTarget>()
@@ -84,5 +84,4 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
 
         return fixMessages
     }
-
 }

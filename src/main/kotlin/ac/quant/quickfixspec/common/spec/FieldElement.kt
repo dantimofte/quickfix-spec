@@ -94,7 +94,7 @@ class FieldElement: IElement {
     }
 
     override fun toString(): String {
-        return "FieldElement(name='$name', number='$number', values=${values.size})"
+        return "FieldElement(name='$name', number='$number', value=${value})"
     }
 
     fun withValue(value: String): FieldElement {
@@ -108,5 +108,29 @@ class FieldElement: IElement {
             values = values,
             value = value
         )
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || javaClass != other.javaClass) return false
+
+        other as FieldElement
+
+        if (name != other.name) return false
+        if (type != other.type) return false
+        if (number != other.number) return false
+        if (fixType != other.fixType) return false
+        if (value != other.value) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + number.hashCode()
+        result = 31 * result + fixType.hashCode()
+        result = 31 * result + value.hashCode()
+        return result
     }
   }

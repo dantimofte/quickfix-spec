@@ -77,4 +77,67 @@ class ParsedFixMessage(private val message: String, private val delimiter: Strin
         }
     }
 
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || javaClass != other.javaClass) return false
+
+        other as ParsedFixMessage
+
+        if (!delimiterEquals(other)) return false
+        if (msgType != other.msgType) return false
+        if (msgName != other.msgName) return false
+        if (!headerFieldsEquals(other)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = delimiter.hashCode()
+        result = 31 * result + msgType.hashCode()
+        result = 31 * result + msgName.hashCode()
+        result = 31 * result + headerFields.hashCode()
+        return result
+    }
+
+    private val delimiterCommonValues: Array<ByteArray> = arrayOf(
+        byteArrayOf(92, 117, 48, 48, 48, 49),  // "\u0001"
+        byteArrayOf(1), // byte representation of 1
+    )
+
+    private fun delimiterInCommonValues(delimiter: ByteArray): Boolean {
+        for (delimiterValue in delimiterCommonValues) {
+            if (delimiter.contentEquals(delimiterValue)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun delimiterEquals(other: ParsedFixMessage): Boolean {
+
+        val delimiterByteArray: ByteArray = delimiter.toByteArray()
+        val otherDelimiterByteArray: ByteArray = other.delimiter.toByteArray()
+
+       val result = delimiterInCommonValues(delimiterByteArray) && delimiterInCommonValues(otherDelimiterByteArray)
+        if (result) {
+            return true
+        }
+        return delimiter == other.delimiter
+    }
+
+    private fun headerFieldsEquals(other: ParsedFixMessage): Boolean {
+        if (headerFields.size != other.headerFields.size) return false
+
+        for (i in headerFields.indices) {
+           // use the equals method from FieldElement
+            if (headerFields[i] != other.headerFields[i]) return false
+        }
+
+        return true
+    }
+
+    override fun toString(): String {
+        return "ParsedFixMessage(delimiter='$delimiter', msgType='$msgType', msgName='$msgName', headerFields=$headerFields)"
+    }
 }

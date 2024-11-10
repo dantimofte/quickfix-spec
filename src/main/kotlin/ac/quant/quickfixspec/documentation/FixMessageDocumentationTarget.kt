@@ -7,7 +7,7 @@ import com.intellij.platform.backend.presentation.TargetPresentation
 
 @Suppress("UnstableApiUsage")
 class FixMessageDocumentationTarget(
-    private val fixMessage: ParsedFixMessage,
+    val fixMessage: ParsedFixMessage,
 ) : DocumentationTarget {
 
     override fun createPointer(): Pointer<out DocumentationTarget> {
