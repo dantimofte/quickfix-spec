@@ -29,7 +29,7 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
         return if (file.name.endsWith(".xml")) {
             getTagDefinition(element)
         } else {
-            getFixMessageDetails(file, element, offset)
+            getFixMessageDetails(file, offset)
         }
     }
 
@@ -62,16 +62,15 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
     }
 
     @VisibleForTesting
-    internal fun getFixMessageDetails(file: PsiFile, element: PsiElement, offset: Int): List<DocumentationTarget> {
+    internal fun getFixMessageDetails(file: PsiFile, offset: Int): List<DocumentationTarget> {
         fixDataDictionaryService = file.project.getService(FixDataDictionaryService::class.java)
 
         val fixMessages = mutableListOf<DocumentationTarget>()
 
         val regexOptionsSet = setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.COMMENTS, RegexOption.IGNORE_CASE)
         val multiLineFixMessageRegex = Regex("8=FIX.*?10=[0-9]{3}(\\\\u0001)?(.)?", regexOptionsSet)
-        val fileText = file.text.substring(element.textOffset)
 
-        val matches = multiLineFixMessageRegex.findAll(fileText)
+        val matches = multiLineFixMessageRegex.findAll(file.text)
         for (match in matches) {
             val fixMessage = match.value
             val fixDelimiter = match.groupValues[1].ifEmpty { match.groupValues[2] }

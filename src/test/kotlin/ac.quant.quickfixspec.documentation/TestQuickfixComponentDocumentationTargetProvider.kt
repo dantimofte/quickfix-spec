@@ -121,8 +121,7 @@ class TestQuickfixComponentDocumentationTargetProvider : BasePlatformTestCase() 
         offsetInsideFixMessage: Int,
         expectedMessage: ParsedFixMessage
     ) {
-        val element: PsiElement = psiFile.findElementAt(0) as PsiElement
-        val documentationTargets = provider.getFixMessageDetails(psiFile, element, offsetInsideFixMessage)
+        val documentationTargets = provider.getFixMessageDetails(psiFile, offsetInsideFixMessage)
         val target = documentationTargets[0] as FixMessageDocumentationTarget
         val targetFixMessage = target.fixMessage
 
@@ -137,8 +136,7 @@ class TestQuickfixComponentDocumentationTargetProvider : BasePlatformTestCase() 
         offsetInsideFixMessage: Int,
         expectedMessage: ParsedFixMessage
     ) {
-        val element: PsiElement = psiFile.findElementAt(0) as PsiElement
-        val documentationTargets = provider.getFixMessageDetails(psiFile, element, offsetInsideFixMessage)
+        val documentationTargets = provider.getFixMessageDetails(psiFile, offsetInsideFixMessage)
         val target = documentationTargets[0] as FixMessageDocumentationTarget
         val targetFixMessage = target.fixMessage
 
