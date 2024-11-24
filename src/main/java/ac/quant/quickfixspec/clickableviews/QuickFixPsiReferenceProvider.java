@@ -8,7 +8,7 @@ import com.intellij.util.ProcessingContext;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
-import static ac.quant.quickfixspec.common.PsiUtils.isTagDeclaration;
+import static ac.quant.quickfixspec.common.spec.XmlUtils.isTagDeclaration;
 
 @Slf4j
 public class QuickFixPsiReferenceProvider extends PsiReferenceProvider {

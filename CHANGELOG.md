@@ -4,6 +4,11 @@
 
 ## [Unreleased]
 
+## [0.5.1]
+- Fix issue with the plugin not working when the file is parsed as specific file type 
+- Convert some java code to kotlin
+- Add more unit tests
+
 ## [0.5.0]
 
 ### Added

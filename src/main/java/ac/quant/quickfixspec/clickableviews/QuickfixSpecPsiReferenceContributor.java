@@ -8,8 +8,8 @@ import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.xml.XmlAttributeValue;
 import org.jetbrains.annotations.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import static ac.quant.quickfixspec.common.PsiUtils.NAME_ATTRIBUTE;
-import static ac.quant.quickfixspec.common.PsiUtils.TAGS_WITH_DEFINITION;
+import static ac.quant.quickfixspec.common.spec.XmlUtils.NAME_ATTRIBUTE;
+import static ac.quant.quickfixspec.common.spec.XmlUtils.TAGS_WITH_DEFINITION;
 
 @Slf4j
 public class QuickfixSpecPsiReferenceContributor extends PsiReferenceContributor {

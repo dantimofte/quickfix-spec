@@ -13,7 +13,7 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 
-import static ac.quant.quickfixspec.common.PsiUtils.*;
+import static ac.quant.quickfixspec.common.spec.XmlUtils.*;
 
 public class ReplaceWithDefinitionInspection extends LocalInspectionTool {
 
@@ -34,6 +34,10 @@ public class ReplaceWithDefinitionInspection extends LocalInspectionTool {
 
                 final String componentName = tag.getAttributeValue("name");
 
+
+                if (componentName == null) {
+                    return;
+                }
 
                 XmlTag definition = findDefinition(componentName, tag.getName(), rootTag);
                 if (definition != null) {
