@@ -1,10 +1,10 @@
 package ac.quant.quickfixspec.documentation
 
 import ac.quant.quickfixspec.common.spec.FixDataDictionaryService
-import ac.quant.quickfixspec.common.PsiUtils.NAME_ATTRIBUTE
-import ac.quant.quickfixspec.common.PsiUtils.TAGS_WITH_DEFINITION
-import ac.quant.quickfixspec.common.PsiUtils.DEFINITION_GROUP_NAME
-import ac.quant.quickfixspec.common.PsiUtils.getRootTag
+import ac.quant.quickfixspec.common.spec.XmlUtils.NAME_ATTRIBUTE
+import ac.quant.quickfixspec.common.spec.XmlUtils.TAGS_WITH_DEFINITION
+import ac.quant.quickfixspec.common.spec.XmlUtils.DEFINITION_GROUP_NAME
+import ac.quant.quickfixspec.common.spec.XmlUtils.getRootTag
 import ac.quant.quickfixspec.common.parsed.ParsedFixMessage
 import com.intellij.platform.backend.documentation.DocumentationTarget
 import com.intellij.platform.backend.documentation.DocumentationTargetProvider
@@ -58,7 +58,7 @@ class QuickfixComponentDocumentationTargetProvider : DocumentationTargetProvider
         }
 
         val attrNameValue = attribute.value ?: return emptyList()
-        return listOf(QuickfixComponentDocumentationTarget(attrNameValue, tag.name, rootTag))
+        return listOf(QuickfixComponentDocumentationTarget(attrNameValue, tag.name, rootTag!!))
     }
 
     @VisibleForTesting

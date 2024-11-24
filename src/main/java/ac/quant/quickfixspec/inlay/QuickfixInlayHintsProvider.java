@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
-import static ac.quant.quickfixspec.common.PsiUtils.getRootTag;
+import static ac.quant.quickfixspec.common.spec.XmlUtils.getRootTag;
 
 @SuppressWarnings("UnstableApiUsage")
 @Slf4j

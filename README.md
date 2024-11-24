@@ -46,6 +46,15 @@ This Plugin is going to make it easier to work with the QuickFix XML Specificati
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 
+## Tests
+./gradlew test
+
+
+## New Release
+
+- Update the version property `pluginVersion = MAJOR.MINOR.PATH`  in the `gradle.properties` file
+- Add a new entry in the `CHANGELOG.md` file
+
 ---
 Plugin based on the [IntelliJ Platform Plugin Template][template].
 

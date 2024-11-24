@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static ac.quant.quickfixspec.common.PsiUtils.*;
+import static ac.quant.quickfixspec.common.spec.XmlUtils.*;
 
 @Slf4j
 public class QuickfixPsiReference implements PsiReference {

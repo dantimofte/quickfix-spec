@@ -1,7 +1,7 @@
 package ac.quant.quickfixspec.documentation
 
 
-import ac.quant.quickfixspec.common.PsiUtils.findDefinition
+import ac.quant.quickfixspec.common.spec.XmlUtils.findDefinition
 import com.intellij.model.Pointer
 import com.intellij.platform.backend.documentation.DocumentationResult
 import com.intellij.platform.backend.documentation.DocumentationTarget
@@ -12,7 +12,7 @@ import com.intellij.psi.xml.XmlTag
 class QuickfixComponentDocumentationTarget(
     private val tagName: String,
     private val parentTagName: String,
-    private val rootTag: XmlTag?
+    private val rootTag: XmlTag
 ) : DocumentationTarget {
 
 
