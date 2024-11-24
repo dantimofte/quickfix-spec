@@ -35,6 +35,10 @@ public class ReplaceWithDefinitionInspection extends LocalInspectionTool {
                 final String componentName = tag.getAttributeValue("name");
 
 
+                if (componentName == null) {
+                    return;
+                }
+
                 XmlTag definition = findDefinition(componentName, tag.getName(), rootTag);
                 if (definition != null) {
                     holder.registerProblem(tag, "Replace with definition", new ReplaceWithDefinitionQuickFix(definition));

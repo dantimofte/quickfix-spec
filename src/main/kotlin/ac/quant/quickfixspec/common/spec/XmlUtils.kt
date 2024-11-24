@@ -30,10 +30,10 @@ object XmlUtils {
     fun getRootTag(element: PsiElement?): XmlTag? {
         var current = element
         while (current != null && current !is PsiFile) {
-            if (current is XmlTag && "fix" == current.getName()) {
+            if (current is XmlTag && "fix" == current.name) {
                 return current
             }
-            current = current.getParent()
+            current = current.parent
         }
         return null
     }
@@ -59,14 +59,10 @@ object XmlUtils {
     // <fields> <field name=""/> </fields>
     @JvmStatic
     fun isTagDeclaration(valueElement: XmlAttributeValue): Boolean {
-        val parentAttribute = valueElement.getParent() as XmlAttribute
-        val xmlTag = parentAttribute.getParent()
-        val parentTag = xmlTag.getParentTag()
-        if (parentTag == null) {
-            return false
-        }
-
-        val parentTagName = parentTag.getName()
+        val parentAttribute = valueElement.parent as XmlAttribute
+        val xmlTag = parentAttribute.parent
+        val parentTag = xmlTag.parentTag
+        val parentTagName = parentTag?.name
 
         return DEFINITION_GROUP_NAME.containsValue(parentTagName)
     }
