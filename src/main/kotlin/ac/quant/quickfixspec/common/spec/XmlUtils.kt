@@ -16,13 +16,13 @@ object XmlUtils {
         "field", "fields"
     )
 
-    val DEFINITION_TAG_NAME: MutableMap<String?, String?> = Map.of<String?, String?>(
+    private val DEFINITION_TAG_NAME: MutableMap<String?, String?> = Map.of<String?, String?>(
         "component", "component",
         "group", "field",
         "field", "field"
     )
     @JvmField
-    val TAGS_WITH_DEFINITION: Array<String> = arrayOf<String>("component", "group", "field")
+    val TAGS_WITH_DEFINITION = arrayOf<String>("component", "group", "field")
 
 
     // Helper method to navigate to the root tag
