@@ -22,7 +22,7 @@ object XmlUtils {
         "field", "field"
     )
     @JvmField
-    val TAGS_WITH_DEFINITION = arrayOf<String>("component", "group", "field")
+    val TAGS_WITH_DEFINITION = arrayOf("component", "group", "field")
 
 
     // Helper method to navigate to the root tag
