@@ -66,4 +66,34 @@ object XmlUtils {
 
         return DEFINITION_GROUP_NAME.containsValue(parentTagName)
     }
+
+    @JvmStatic
+    fun getCurrentTag(element: PsiElement): XmlTag {
+        if (element is XmlTag) {
+            return element
+        }
+
+        // iterate up the tree until we find the tag
+        var current = element
+        while (current !is XmlTag) {
+            current = current.parent
+        }
+        return current
+    }
+
+    //Check if the tag is a reference to a component tag
+    @JvmStatic
+     fun isComponentReference(tag: XmlTag): Boolean {
+        val parentTag = tag.parentTag ?: return false
+        if (parentTag.name == "components") {
+            return false
+        }
+
+        // if the tag is not self-closing that means it is a definition
+        if (tag.subTags.size > 0) {
+            return false
+        }
+
+        return true
+    }
 }
