@@ -1,15 +1,16 @@
 <html lang="en">
 <body>
 <p>
-    Detects shorthand <code>&lt;component&gt;</code> tags (e.g., <code>&lt;component name="compName1" /&gt;</code>) within
-    <code>&lt;message&gt;</code> sections and suggests replacing them with their full definition from the
-    <code>&lt;components&gt;</code> section of the same XML file.
+    Detects shorthand <code>&lt;component&gt;</code> tags (e.g., <code>&lt;component name="compName1" /&gt;</code>)
+    and suggests replacing them with their full definition from the <code>&lt;components&gt;</code> section of the same XML file.
 </p>
 
 <h3>Example</h3>
 <pre><code class="language-xml">
 &lt;message&gt;
+  &lt;field name="field1"/&gt;
   &lt;component name="compName1" /&gt;
+  &lt;field name="field2" /&gt;
 &lt;/message&gt;
 
 &lt;components&gt;
@@ -21,14 +22,19 @@
 </code></pre>
 
 <p>
-    Suggestion: Expand <code>&lt;component name="compName1" /&gt;</code> to:
+    Suggestion: <strong>Replace component reference with definition</strong>
 </p>
 
+<p>Result:</p>
 <pre><code class="language-xml">
-&lt;component name="compName1"&gt;
-  &lt;field name="aa" /&gt;
-  &lt;field name="bb" /&gt;
-&lt;/component&gt;
+&lt;message&gt;
+   &lt;field name="field1"/&gt;
+    &lt;component name="compName1"&gt;
+      &lt;field name="aa" /&gt;
+      &lt;field name="bb" /&gt;
+    &lt;/component&gt;
+   &lt;field name="field2" /&gt;
+&lt;/message&gt;
 </code></pre>
 
 </body>
