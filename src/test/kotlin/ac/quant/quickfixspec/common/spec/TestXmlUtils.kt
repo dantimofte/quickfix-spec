@@ -21,7 +21,6 @@ class TestXmlUtils : BasePlatformTestCase() {
         }
     }
 
-
     fun testFindDefinition() {
         val psiFile = getXmlFile(myFixture, "FIX44.xml")
         val rootTag = psiFile.findElementAt(0)!!.parent as XmlTag
@@ -111,10 +110,8 @@ class TestXmlUtils : BasePlatformTestCase() {
         }
     }
 
-
     fun testIsTagDeclaration() {
         val psiFile = getXmlFile(myFixture, "FIX44.xml")
-        val rootTag = psiFile.findElementAt(0)!!.parent as XmlTag
 
         val indexes = arrayOf(2650, 2785, 108734, 167517)
         val expectedDeclarations = arrayOf(false, false, true, true)
@@ -131,6 +128,28 @@ class TestXmlUtils : BasePlatformTestCase() {
             assertEquals("Attribute value '${xmlAttributeValue.value}' at index $index should be a declaration: $expectedDeclaration", expectedDeclaration, isDeclaration)
         }
 
+    }
+
+    fun testGetCurrentTag() {
+        val psiFile = getXmlFile(myFixture, "FIX44.xml")
+
+        val expectedTagsMap = mapOf(
+            0 to "fix",
+            2650 to "field",
+            2785 to "component",
+            4879 to "message",
+            12818 to "group",
+            108734 to "component",
+            167517 to "field"
+        )
+
+        for (positionInFile in expectedTagsMap.keys) {
+            val expectedTag = expectedTagsMap[positionInFile]!!
+            val psiElement = psiFile.findElementAt(positionInFile)!!
+
+            val currentTag = XmlUtils.getCurrentTag(psiElement)
+            assertEquals("Current tag for element at positionInFile $positionInFile should be '$expectedTag' but was '${currentTag.name}'", expectedTag, currentTag.name)
+        }
     }
 
     override fun getTestDataPath() = "src/main/resources/spec"
