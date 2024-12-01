@@ -35,28 +35,13 @@ jobs:
 
     steps:
 
-      - name: Clean Workspace
+      # Free GitHub Actions Environment Disk Space
+      - name: Maximize Build Space
         if : ${{ matrix.os == 'ubuntu-latest' }}
-        shell: bash
-        run: |
-          echo "Listing 100 largest packages"
-          dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 100
-          df -h
-          echo "Removing large packages"
-          sudo apt-get update
-          sudo apt-get remove -y '^dotnet-.*'
-          sudo apt-get remove -y azure-cli microsoft-edge-stable google-chrome-stable postgresql-14 firefox powershell mono-devel libgl1-mesa-dri
-          sudo apt-get autoremove -y
-          sudo apt-get clean
-          df -h
-          echo "Removing large directories"
-          rm -rf /usr/share/dotnet/
-          df -h
-          sudo swapoff -a
-          sudo rm -f /swapfile
-          sudo apt clean
-          docker rmi $(docker image ls -aq)
-          df -h
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
+        with:
+          tool-cache: false
+          large-packages: false
 
 
       # Check out the current repository
