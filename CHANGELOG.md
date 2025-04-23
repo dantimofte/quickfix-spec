@@ -4,6 +4,11 @@
 
 ## [Unreleased]
 
+## [0.5.3]
+- Add support for ide 251.* version
+
+## [0.5.2]
+
 ## [0.5.1]
 - Fix issue with the plugin not working when the file is parsed as specific file type 
 - Convert some java code to kotlin

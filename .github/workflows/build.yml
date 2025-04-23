@@ -44,7 +44,7 @@ jobs:
           echo "Removing large packages"
           sudo apt-get update
           sudo apt-get remove -y '^dotnet-.*'
-          sudo apt-get remove -y azure-cli microsoft-edge-stable google-chrome-stable postgresql-14 firefox powershell mono-devel libgl1-mesa-dri
+          sudo apt-get remove -y azure-cli microsoft-edge-stable google-chrome-stable postgresql-16 firefox powershell mono-devel libgl1-mesa-dri
           sudo apt-get autoremove -y
           sudo apt-get clean
           df -h
@@ -55,7 +55,10 @@ jobs:
           sudo swapoff -a
           sudo rm -f /swapfile
           sudo apt clean
-          docker rmi $(docker image ls -aq)
+          echo 'Docker images to remove:'
+          docker image ls -aq
+          echo 'Docker list finished'
+          # docker rmi $(docker image ls -aq)
           df -h
 
       # Check out the current repository
