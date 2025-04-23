@@ -55,7 +55,10 @@ jobs:
           sudo swapoff -a
           sudo rm -f /swapfile
           sudo apt clean
-          docker rmi $(docker image ls -aq)
+          echo "Docker images to remove:"
+          docker image ls -aq
+          echo "Docker list finished"
+#          docker rmi $(docker image ls -aq)
           df -h
 
       # Check out the current repository
