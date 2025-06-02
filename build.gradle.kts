@@ -37,7 +37,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.12.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.12.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.12.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.13.0")
 
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
